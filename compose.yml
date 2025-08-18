@@ -1,0 +1,20 @@
+services:
+  GLOB-DB:
+    image:  postgres:17.6
+    volumes:
+      - db-data:/var/lib/postgresql
+    env_file:
+      - .env
+    expose:
+      - 5432
+  GLOB-ADMIN-DB:
+    image: dpage/pgadmin4
+    volumes:
+      - admin-db:/var/lib/pgadmin
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+volumes:
+  db-data:
+  admin-db:
