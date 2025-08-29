@@ -19,7 +19,6 @@ services:
     restart: always
   glob-import-export-module:
     build: ./GLOB-IMPORT-EXPORT-MODULE/api
-    
     env_file:
       - .env
     ports:
