@@ -7,7 +7,6 @@ services:
       - .env
     expose:
       - 5432
-    restart: always
   GLOB-ADMIN-DB:
     image: dpage/pgadmin4
     volumes:
@@ -16,7 +15,6 @@ services:
       - .env
     ports:
       - "8080:8080"
-    restart: always
   glob-import-export-module:
     build: ./GLOB-IMPORT-EXPORT-MODULE/api
     env_file:
@@ -28,8 +26,23 @@ services:
     restart: always
     develop:
       watch:
-        - action: rebuild
+        - action: sync+restart
           path: ./GLOB-IMPORT-EXPORT-MODULE/api
+          target: /home/app
+  glob-data-application:
+    build: ./GLOB-DATA-APPLICATION
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - GLOB-DB
+    restart: always
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./GLOB-DATA-APPLICATION
+          target: /home/app
 volumes:
   db-data:
   admin-db:

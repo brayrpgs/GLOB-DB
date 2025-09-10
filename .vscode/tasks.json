@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Docker",
+            "label": "Build",
             "type": "shell",
             "command": "docker compose up -d --build",
             "problemMatcher": [],
@@ -14,7 +14,7 @@
             }
         },
         {
-            "label": "Docker Dev",
+            "label": "Watch",
             "type": "shell",
             "command": "docker compose watch",
             "problemMatcher": [],
