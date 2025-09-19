@@ -1,6 +1,6 @@
 services:
   GLOB-DB:
-    image:  postgres:17.6
+    image: postgres:17.6
     volumes:
       - db-data:/var/lib/postgresql
     env_file:
@@ -42,6 +42,21 @@ services:
       watch:
         - action: sync+restart
           path: ./GLOB-DATA-APPLICATION
+          target: /home/app
+
+  glob-security:
+    build: ./GLOB-SECURITY
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - GLOB-DB
+    restart: always
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./GLOB-SECURITY
           target: /home/app
 volumes:
   db-data:
