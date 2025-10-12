@@ -24,9 +24,11 @@ services:
     depends_on:
       - GLOB-DB
     restart: always
+    volumes:
+      - ./GLOB-IMPORT-EXPORT-MODULE/api:/home/app:rw
     develop:
       watch:
-        - action: sync+restart
+        - action: restart
           path: ./GLOB-IMPORT-EXPORT-MODULE/api
           target: /home/app
   glob-data-application:
@@ -38,12 +40,13 @@ services:
     depends_on:
       - GLOB-DB
     restart: always
+    volumes:
+      - ./GLOB-DATA-APPLICATION:/home/app:rw
     develop:
       watch:
-        - action: sync+restart
+        - action: restart
           path: ./GLOB-DATA-APPLICATION
           target: /home/app
-
   glob-security:
     build: ./GLOB-SECURITY
     env_file:
@@ -53,10 +56,29 @@ services:
     depends_on:
       - GLOB-DB
     restart: always
+    volumes:
+      - ./GLOB-SECURITY:/home/app:rw
     develop:
       watch:
-        - action: sync+restart
+        - action: restart
           path: ./GLOB-SECURITY
+          target: /home/app
+  glob-fronted:
+    build: ./GLOB-FRONTEND
+    ports:
+      - "5173:5173"
+    depends_on:
+      - glob-data-application
+      - glob-security
+      - glob-import-export-module
+    restart: always
+    volumes:
+      - ./GLOB-FRONTEND:/home/app:rw
+      - /home/app/node_modules
+    develop:
+      watch:
+        - action: restart
+          path: ./GLOB-FRONTEND
           target: /home/app
 volumes:
   db-data:
