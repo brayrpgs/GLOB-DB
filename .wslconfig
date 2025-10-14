@@ -1,3 +1,5 @@
 [wsl2]
 memory=2GB
 processors=3
+
+#use this command as admin -> wsl --shutdown
