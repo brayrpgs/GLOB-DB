@@ -24,11 +24,9 @@ services:
     depends_on:
       - GLOB-DB
     restart: always
-    volumes:
-      - import-export-data:/home/app:rw
     develop:
       watch:
-        - action: restart
+        - action: sync+restart
           path: ./GLOB-IMPORT-EXPORT-MODULE/api
           target: /home/app
   glob-data-application:
@@ -40,11 +38,9 @@ services:
     depends_on:
       - GLOB-DB
     restart: always
-    volumes:
-      - data-application-data:/home/app:rw
     develop:
       watch:
-        - action: restart
+        - action: sync+restart
           path: ./GLOB-DATA-APPLICATION
           target: /home/app
   glob-security:
@@ -56,14 +52,12 @@ services:
     depends_on:
       - GLOB-DB
     restart: always
-    volumes:
-      - security-data:/home/app:rw
     develop:
       watch:
-        - action: restart
+        - action: sync+restart
           path: ./GLOB-SECURITY
           target: /home/app
-  glob-fronted:
+  glob-frontend:
     build: ./GLOB-FRONTEND
     ports:
       - "5173:5173"
@@ -72,17 +66,11 @@ services:
       - glob-security
       - glob-import-export-module
     restart: always
-    volumes:
-      - frontend-data:/home/app:rw
     develop:
       watch:
-        - action: restart
+        - action: sync+restart
           path: ./GLOB-FRONTEND
           target: /home/app
 volumes:
   db-data:
   admin-db:
-  import-export-data:
-  frontend-data:
-  security-data:
-  data-application-data:
