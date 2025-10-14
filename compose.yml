@@ -25,7 +25,7 @@ services:
       - GLOB-DB
     restart: always
     volumes:
-      - ./GLOB-IMPORT-EXPORT-MODULE/api:/home/app:rw
+      - import-export-data:/home/app:rw
     develop:
       watch:
         - action: restart
@@ -41,7 +41,7 @@ services:
       - GLOB-DB
     restart: always
     volumes:
-      - ./GLOB-DATA-APPLICATION:/home/app:rw
+      - data-application-data:/home/app:rw
     develop:
       watch:
         - action: restart
@@ -57,7 +57,7 @@ services:
       - GLOB-DB
     restart: always
     volumes:
-      - ./GLOB-SECURITY:/home/app:rw
+      - security-data:/home/app:rw
     develop:
       watch:
         - action: restart
@@ -73,8 +73,7 @@ services:
       - glob-import-export-module
     restart: always
     volumes:
-      - ./GLOB-FRONTEND:/home/app:rw
-      - /home/app/node_modules
+      - frontend-data:/home/app:rw
     develop:
       watch:
         - action: restart
@@ -83,3 +82,7 @@ services:
 volumes:
   db-data:
   admin-db:
+  import-export-data:
+  frontend-data:
+  security-data:
+  data-application-data:
