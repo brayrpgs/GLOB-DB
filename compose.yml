@@ -71,6 +71,20 @@ services:
         - action: sync+restart
           path: ./GLOB-FRONTEND
           target: /home/app
+  glob-sse:
+    build: ./GLOB-SSE
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+    depends_on:
+      - GLOB-DB
+    restart: always
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./GLOB-SSE
+          target: /home/app
 volumes:
   db-data:
   admin-db:
