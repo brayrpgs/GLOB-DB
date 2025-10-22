@@ -85,7 +85,6 @@ services:
         - action: sync+restart
           path: ./GLOB-SSE
           target: /home/app
-
   ollama:
     image: ollama/ollama:latest
     ports:
@@ -93,7 +92,6 @@ services:
     volumes:
       - ollama:/root/.ollama
     restart: always
-
   ollama-setup:
     image: ollama/ollama:latest
     depends_on:
@@ -112,7 +110,6 @@ services:
       fi
       ollama list
     restart: "no"
-
   glob-performance-ia:
     build: ./GLOB-PERFORMANCE-IA
     container_name: glob-performance-ia
