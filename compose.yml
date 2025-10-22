@@ -85,6 +85,58 @@ services:
         - action: sync+restart
           path: ./GLOB-SSE
           target: /home/app
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    restart: always
+
+  ollama-setup:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    volumes:
+      - ollama:/root/.ollama
+    entrypoint: [ "/bin/sh", "-c" ]
+    command: |
+      echo "Checking for model llama3.2:3b..."
+      if ollama list | grep -q "llama3.2:3b"; then
+        echo "Model already installed"
+      else
+        echo "Pulling llama3.2:3b..."
+        ollama pull llama3.2:3b
+        echo "Model ready!"
+      fi
+      ollama list
+    restart: "no"
+
+  glob-performance-ia:
+    build: ./GLOB-PERFORMANCE-IA
+    container_name: glob-performance-ia
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+    depends_on:
+      - GLOB-DB
+      - ollama
+      - ollama-setup
+    restart: always
+    volumes:
+      - ./GLOB-PERFORMANCE-IA:/home/app:rw
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2:3b
+    develop:
+      watch:
+        - action: restart
+          path: ./GLOB-PERFORMANCE-IA
+          target: /home/app
+
 volumes:
   db-data:
   admin-db:
+  ollama:
