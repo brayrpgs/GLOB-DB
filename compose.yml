@@ -86,32 +86,18 @@ services:
           path: ./GLOB-SSE
           target: /home/app
   ollama:
-    image: ollama/ollama:latest
+    build:
+      context: ./GLOB-PERFORMANCE-IA
+      dockerfile: Dockerfile.ollama
     ports:
       - "11434:11434"
     volumes:
       - ollama:/root/.ollama
     restart: always
-  ollama-setup:
-    image: ollama/ollama:latest
-    depends_on:
-      - ollama
-    volumes:
-      - ollama:/root/.ollama
-    entrypoint: [ "/bin/sh", "-c" ]
-    command: |
-      echo "Checking for model llama3.2:3b..."
-      if ollama list | grep -q "llama3.2:3b"; then
-        echo "Model already installed"
-      else
-        echo "Pulling llama3.2:3b..."
-        ollama pull llama3.2:3b
-        echo "Model ready!"
-      fi
-      ollama list
-    restart: "no"
+
   glob-performance-ia:
-    build: ./GLOB-PERFORMANCE-IA
+    build: 
+      context: ./GLOB-PERFORMANCE-IA
     container_name: glob-performance-ia
     env_file:
       - .env
@@ -120,7 +106,6 @@ services:
     depends_on:
       - GLOB-DB
       - ollama
-      - ollama-setup
     restart: always
     volumes:
       - ./GLOB-PERFORMANCE-IA:/home/app:rw
