@@ -107,16 +107,13 @@ services:
       - GLOB-DB
       - ollama
     restart: always
-    volumes:
-      - ./GLOB-PERFORMANCE-IA:/home/app:rw
     environment:
       - OLLAMA_URL=http://ollama:11434
       - OLLAMA_MODEL=llama3.2:3b
     develop:
       watch:
-        - action: restart
+        - action: rebuild
           path: ./GLOB-PERFORMANCE-IA
-          target: /home/app
 
 volumes:
   db-data:
